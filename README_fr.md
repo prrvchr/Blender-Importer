@@ -1,15 +1,42 @@
-**This [document][1] in English.**
+<!--
+╔════════════════════════════════════════════════════════════════════════════════════╗
+║                                                                                    ║
+║   Copyright (c) 2020 https://prrvchr.github.io                                     ║
+║                                                                                    ║
+║   Permission is hereby granted, free of charge, to any person obtaining            ║
+║   a copy of this software and associated documentation files (the "Software"),     ║
+║   to deal in the Software without restriction, including without limitation        ║
+║   the rights to use, copy, modify, merge, publish, distribute, sublicense,         ║
+║   and/or sell copies of the Software, and to permit persons to whom the Software   ║
+║   is furnished to do so, subject to the following conditions:                      ║
+║                                                                                    ║
+║   The above copyright notice and this permission notice shall be included in       ║
+║   all copies or substantial portions of the Software.                              ║
+║                                                                                    ║
+║   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,                  ║
+║   EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES                  ║
+║   OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.        ║
+║   IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY             ║
+║   CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,             ║
+║   TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE       ║
+║   OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                                    ║
+║                                                                                    ║
+╚════════════════════════════════════════════════════════════════════════════════════╝
+-->
+# [![Blender Importer logo][1]][2] Documentation
 
-Un [atelier][2] [FreeCAD][3] qui permet d'importer des matériaux et des couleurs/transparences à partir d'un fichier .blend
+**This [document][3] in English.**
+
+Un [atelier][4] [FreeCAD][5] qui permet d'importer des matériaux et des couleurs/transparences à partir d'un fichier .blend
 
 ## Introduction:
 
-**Blender Importer** fait partie d'une [Suite][4] d'extensions permettant de vous offrir des services inovants dans des logiciels libres.  
+**Blender Importer** fait partie d'une [Suite][6] d'extensions permettant de vous offrir des services inovants dans des logiciels libres.  
 
 Etant un logiciel libre je vous encourage:
-- A dupliquer son [code source][5].
+- A dupliquer son [code source][7].
 - A apporter des modifications, des corrections, des ameliorations.
-- D'ouvrir une [issue][6] si nécessaire.
+- D'ouvrir une [issue][8] si nécessaire.
 
 Bref, à participer au developpement de cette extension.
 Car c'est ensemble que nous pouvons rendre le Logiciel Libre plus intelligent.
@@ -18,7 +45,7 @@ ___
 
 ## Installation:
 
-- ![Blender-Importer logo][7] Télécharger le fichier **[Blender-Importer.zip][8]** [![Version][9]][8]
+- ![Blender-Importer logo][9] Télécharger le fichier **[Blender-Importer.zip][10]** [![Version][11]][10]
 
 Copier ce fichier dans:
 
@@ -39,15 +66,17 @@ Après plusieurs tentatives sous FreeCAD j'ai dû recourir à Blender pour pouvo
 Afin de faciliter ce travail, j'ai décidé de rendre interopérables les deux logiciels FreeCAD et Blender.  
 Cette interopérabilité est réalisée grâce à l'atelier FreeCAD **Blender Importer** et au plugin Blender **FreeCAD Importer**.
 
-Plus d'informations sur ce [fil de discussion][10] (en anglais)
+Plus d'informations sur ce [fil de discussion][12] (en anglais)
 
-[1]: <https://prrvchr.github.io/Blender-Importer/>
-[2]: <https://wiki.freecadweb.org/Workbenches>
-[3]: <https://www.freecadweb.org/?lang=fr>
-[4]: <https://prrvchr.github.io/README_fr>
-[5]: <https://github.com/prrvchr/Blender-Importer>
-[6]: <https://github.com/prrvchr/Blender-Importer/issues/new>
-[7]: <https://github.com/prrvchr/Blender-Importer/img/blender.svg#middle>
-[8]: <https://github.com/prrvchr/Blender-Importer/releases/latest/download/Blender-Importer.zip>
-[9]: <https://img.shields.io/github/downloads/prrvchr/Blender-Importer/latest/total?label=v0.0.1#right>
-[10]: <https://forum.freecad.org/viewtopic.php?t=83135>
+[1]: </img/blender.svg#collapse>
+[2]: <https://prrvchr.github.io/Blender-Importer/README_fr>
+[3]: <https://prrvchr.github.io/Blender-Importer/>
+[4]: <https://wiki.freecadweb.org/Workbenches>
+[5]: <https://www.freecadweb.org/?lang=fr>
+[6]: <https://prrvchr.github.io/README_fr>
+[7]: <https://github.com/prrvchr/Blender-Importer>
+[8]: <https://github.com/prrvchr/Blender-Importer/issues/new>
+[9]: </img/blender.svg#middle>
+[10]: <https://github.com/prrvchr/Blender-Importer/releases/latest/download/Blender-Importer.zip>
+[11]: <https://img.shields.io/github/downloads/prrvchr/Blender-Importer/latest/total?label=v0.0.1#right>
+[12]: <https://forum.freecad.org/viewtopic.php?t=83135>

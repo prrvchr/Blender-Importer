@@ -27,16 +27,18 @@
 
 **Ce [document][3] en français.**
 
-A [FreeCAD][4][Workbench][5] which allows you to import materials and colors/transparencies from a .blend file
+# version [0.0.1][4]
+
+A [FreeCAD][5][Workbench][6] which allows you to import materials and colors/transparencies from a .blend file
 
 ## Introduction:
 
-**Blender Importer** is part of a [Suite][6] of extensions allowing to offer you innovative services in Open Source Sofware.  
+**Blender Importer** is part of a [Suite][7] of extensions allowing to offer you innovative services in Open Source Sofware.  
 
 Being free software I encourage you:
-- To duplicate its [source code][7].
+- To duplicate its [source code][8].
 - To make changes, corrections, improvements.
-- To open [issue][8] if needed.
+- To open [issue][9] if needed.
 
 In short, to participate in the development of this extension.
 Because it is together that we can make Free Software smarter.
@@ -45,7 +47,7 @@ ___
 
 ## Install:
 
-- ![Blender-Importer logo][9] Download file **[Blender-Importer.zip][10]** [![Version][11]][10]
+- ![Blender-Importer logo][10] Download file **[Blender-Importer.zip][11]** [![Version][12]][11]
 
 Copy this file in:
 
@@ -66,17 +68,18 @@ After several attempts in FreeCAD I had to resort to using Blender to be able to
 In order to make this work easier, I decided to make the two softwares FreeCAD and Blender interoperable.  
 This interoperability is achieved thanks to the FreeCAD **Blender Importer** workbench and the Blender **FreeCAD Importer** plugin.
 
-More information on this [forum thread][12]
+More information on this [forum thread][13]
 
 [1]: <https://prrvchr.github.io/Blender-Importer/img/blender-importer.svg#collapse>
 [2]: <https://prrvchr.github.io/Blender-Importer/>
 [3]: <https://prrvchr.github.io/Blender-Importer/README_fr>
-[4]: <https://www.freecadweb.org>
-[5]: <https://wiki.freecadweb.org/Workbenches>
-[6]: <https://prrvchr.github.io/>
-[7]: <https://github.com/prrvchr/Blender-Importer>
-[8]: <https://github.com/prrvchr/Blender-Importer/issues/new>
-[9]: <https://prrvchr.github.io/Blender-Importer/img/blender.svg#middle>
-[10]: <https://github.com/prrvchr/Blender-Importer/releases/latest/download/Blender-Importer.zip>
-[11]: <https://img.shields.io/github/downloads/prrvchr/Blender-Importer/latest/total?label=v0.0.1#right>
-[12]: <https://forum.freecad.org/viewtopic.php?t=83135>
+[4]: <https://prrvchr.github.io/Blender-Importer/#historical>
+[5]: <https://www.freecadweb.org>
+[6]: <https://wiki.freecadweb.org/Workbenches>
+[7]: <https://prrvchr.github.io/>
+[8]: <https://github.com/prrvchr/Blender-Importer>
+[9]: <https://github.com/prrvchr/Blender-Importer/issues/new>
+[10]: <https://prrvchr.github.io/Blender-Importer/img/blender.svg#middle>
+[11]: <https://github.com/prrvchr/Blender-Importer/releases/latest/download/Blender-Importer.zip>
+[12]: <https://img.shields.io/github/downloads/prrvchr/Blender-Importer/latest/total?label=v0.0.1#right>
+[13]: <https://forum.freecad.org/viewtopic.php?t=83135>

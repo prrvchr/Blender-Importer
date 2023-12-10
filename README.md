@@ -29,7 +29,7 @@
 
 # version [0.0.1][4]
 
-A [FreeCAD][5][Workbench][6] which allows you to import materials and colors/transparencies from a .blend file
+A [FreeCAD][5] [Workbench][6] which allows you to import Blender materials from a .blend file.
 
 ## Introduction:
 
@@ -66,9 +66,9 @@ I am required to present a realistic photo of my future house for my building pe
 I managed to draw the basic plan of this famous house in FreeCAD. I now need to be able to produce this realistic photo.  
 After several attempts in FreeCAD I had to resort to using Blender to be able to produce this famous realistic photo.  
 In order to make this work easier, I decided to make the two softwares FreeCAD and Blender interoperable.  
-This interoperability is achieved thanks to the FreeCAD **Blender Importer** workbench and the Blender **FreeCAD Importer** plugin.
+This interoperability is achieved thanks to the FreeCAD **Blender Importer** workbench and the Blender **[FreeCAD Importer][13]** add-ons.
 
-More information on this [forum thread][13]
+More information on this [forum thread][14]
 
 [1]: <https://prrvchr.github.io/Blender-Importer/img/blender-importer.svg#collapse>
 [2]: <https://prrvchr.github.io/Blender-Importer/>
@@ -82,4 +82,5 @@ More information on this [forum thread][13]
 [10]: <https://prrvchr.github.io/Blender-Importer/img/blender.svg#middle>
 [11]: <https://github.com/prrvchr/Blender-Importer/releases/latest/download/Blender-Importer.zip>
 [12]: <https://img.shields.io/github/downloads/prrvchr/Blender-Importer/latest/total?label=v0.0.1#right>
-[13]: <https://forum.freecad.org/viewtopic.php?t=83135>
+[13]: <https://prrvchr.github.io/FreeCAD-Importer/>
+[14]: <https://forum.freecad.org/viewtopic.php?t=83135>

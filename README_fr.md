@@ -52,7 +52,7 @@ Copier ce fichier dans:
 - Sous Linux: `~/.local/share/FreeCAD/Mod/`
 - Sous Windows: `%AppData%\FreeCAD\Mod`
 
-Puis décompresser le fichier zip dans le repertoire `Mod`. Veuillez noter que la taille de l'archive est de 1,2 Go. Une fois décompressé, vous pouvez supprimer le fichier zip.
+Puis décompresser le fichier zip dans le repertoire `Mod`. Veuillez noter que **la taille de l'archive est de 1,2 Go**. Une fois décompressé, vous pouvez supprimer le fichier zip.
 
 ___
 
@@ -68,7 +68,7 @@ Cette interopérabilité est réalisée grâce à l'atelier FreeCAD **Blender Im
 
 Plus d'informations sur ce [fil de discussion][12] (en anglais)
 
-[1]: <https://prrvchr.github.io/Blender-Importer/img/blender_importer.svg#collapse>
+[1]: <https://prrvchr.github.io/Blender-Importer/img/blender-importer.svg#collapse>
 [2]: <https://prrvchr.github.io/Blender-Importer/README_fr>
 [3]: <https://prrvchr.github.io/Blender-Importer/>
 [4]: <https://wiki.freecadweb.org/Workbenches>

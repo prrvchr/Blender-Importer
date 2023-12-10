@@ -52,7 +52,7 @@ Copy this file in:
 - For Linux: `~/.local/share/FreeCAD/Mod/`
 - For Windows: `%AppData%\FreeCAD\Mod`
 
-Then unzip the zip file in the `Mod` directory. Please note that the archive size is 1.2 GB. Once unzipped you can delete the zip file.
+Then unzip the zip file in the `Mod` directory. Please note that **the archive size is 1.2 GB**. Once unzipped you can delete the zip file.
 
 ___
 
@@ -68,7 +68,7 @@ This interoperability is achieved thanks to the FreeCAD **Blender Importer** wor
 
 More information on this [forum thread][12]
 
-[1]: <https://prrvchr.github.io/Blender-Importer/img/blender_importer.svg#collapse>
+[1]: <https://prrvchr.github.io/Blender-Importer/img/blender-importer.svg#collapse>
 [2]: <https://prrvchr.github.io/Blender-Importer/>
 [3]: <https://prrvchr.github.io/Blender-Importer/README_fr>
 [4]: <https://www.freecadweb.org>

@@ -74,7 +74,6 @@ def importFile(doc):
     # browse all materiels in the Blender scene
     for bmat in bpy.data.materials:
         if not bmat.use_nodes:
-            continue
             msg = f"Blender material: {bmat.name}, don't use node, skipped...\n"
             warnings.append(msg)
             App.Console.PrintMessage(msg)

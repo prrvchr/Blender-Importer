@@ -33,26 +33,28 @@ import FreeCAD as App
 import FreeCADGui as Gui
 
 from PySide2.QtWidgets import QFileDialog
+from PySide.QtGui import QMessageBox, QInputDialog
 
 import os
-import bpy
-import json
-import mathutils
 
-from ArchMaterial import makeMaterial
 from ArchMaterial import _CommandArchMaterial
 
-from .helper import isValidMaterial
+from .taskpanels import BlenderMaterial
+
+from .helper import importFile, isMultiMaterial
+
+iconpath = os.path.dirname(__file__)
+icondir  = 'icons'
 
 
 class BlenderImport():
 
     def GetResources(self):
-        icon = os.path.join(os.path.dirname(__file__) , 'icons', 'blender.svg')
-        return {'Pixmap'   : icon,
-                'MenuText' : 'Blender Import',
-                'Accel'    : 'B, I',
-                'ToolTip'  : 'Import Blender file'}
+        icon = os.path.join(iconpath , icondir, 'blender-importer.svg')
+        return {'Pixmap':   icon,
+                'MenuText': 'Blender Import',
+                'Accel':    'B, I',
+                'ToolTip':  'Import Blender file'}
 
     def IsActive(self):
         return True
@@ -60,10 +62,15 @@ class BlenderImport():
     def Activated(self):
         doc = App.ActiveDocument
         if doc is None:
+            App.Console.PrintMessage("\n")
             App.Console.PrintMessage("No document open, can't continue...\n")
             return
+        if not doc.FileName:
+            App.Console.PrintMessage("\n")
+            App.Console.PrintMessage("The active document has not been saved, can't continue...\n")
+            return
         doc.openTransaction('Blender Import')
-        success, warnings, url = _importFile(doc)
+        success, warnings, url = importFile(doc)
         doc.commitTransaction()
         doc.recompute()
         if success:
@@ -99,227 +106,97 @@ class MakeMaterial(_CommandArchMaterial):
         App.ActiveDocument.commitTransaction()
 
 
-def _importFile(doc):
-    warnings = []
-    root = 'Blender'
-    path, fname = os.path.split(doc.FileName)
-    filename, sep, ext = fname.rpartition('.')
-    App.Console.PrintMessage(f"Activated active document name: {filename}\n")
+class ApplyMaterial():
+    """GUI command to apply a material to an object."""
 
-    # get and open the Blender file
-    path = App.ParamGet('User parameter:BaseApp/Preferences/General').GetString('FileOpenSavePath')
-    url, filter = QFileDialog.getOpenFileName(None, 'Import Blender file', path, 'Blender file (*.blend)')
-    if not url:
-        App.Console.PrintMessage("\n")
-        App.Console.PrintMessage("No file as been chosen, can't continue...\n")
-        return False, warnings, url
-    bpy.ops.wm.open_mainfile(filepath=url)
+    def GetResources(self):
+        icon = os.path.join(iconpath , icondir, 'ApplyMaterial.svg')
+        return {'Pixmap':   icon,
+                'MenuText': 'Apply Material',
+                'Accel':    'A, M',
+                'ToolTip':  'Apply a Material to selection'}
 
-    # get the Blender collection having same name as the .blend file name (without extension)
-    bcoll = bpy.data.collections.get(filename)
-    if bcoll is None:
-        App.Console.PrintMessage("\n")
-        App.Console.PrintMessage(f"No collection named: {filename}, can't continue... ")
-        collections = []
-        for bcoll in bpy.data.collections:
-            collections.append(bcoll.name)
-        App.Console.PrintMessage(f"Available collections: {', '.join(collections)}\n")
-        return False, warnings, url
+    def Activated(self):
+        """Respond to Activated event (callback).
 
-    # get a dict of FreeCAD materials in the document
-    materials = {obj.Label: obj for obj in doc.Objects if isValidMaterial(obj)}
+        This code is executed when the command is run in FreeCAD.
+        It sets the Material property of the selected object(s).
+        If the Material property does not exist in the object(s), it is
+        created.
+        """
+        # Get selected objects
+        selection = Gui.Selection.getSelection()
+        if not selection:
+            title = 'Blender Importer empty Selection'
+            msg = 'Please select object(s) before applying material.'
+            QMessageBox.warning(None, title, msg)
+            return
 
-    # browse all materiels in the Blender scene
-    for bmat in bpy.data.materials:
-        if not bmat.use_nodes:
-            continue
-        matdata = {}
-        for node in bmat.node_tree.nodes:
-            links = {}
-            inputs = {}
-            outputs = {}
-            sockets = {}
+        # Let user pick the Material
+        mats = [o for o in App.ActiveDocument.Objects
+                if o.isDerivedFrom("App::MaterialObjectPython") or isMultiMaterial(o)]
+        if not mats:
+            title = 'Blender Importer no Material'
+            msg = 'No Material in document. Please create a Material before applying.'
+            QMessageBox.warning(None, title, msg)
+            return
 
-            if node.inputs:
-                link, input = _getInputData(warnings, bmat, node)
-                links.update(link)
-                inputs.update(input)
+        matlabels = [m.Label for m in mats]
+        current_mats_labels = [
+            o.Material.Label
+            for o in selection
+            if hasattr(o, "Material")
+            and hasattr(o.Material, "Label")
+            and o.Material.Label
+        ]
+        current_mats = [
+            count
+            for count, val in enumerate(matlabels)
+            if val in current_mats_labels
+        ]
+        current_mat = current_mats[0] if len(current_mats) == 1 else 0
 
-            if node.outputs:
-                output = _getOutputs(warnings, bmat, node)
-                outputs.update(output)
+        input, status = QInputDialog.getItem(None,
+                                             'Blender Importer Material Applier',
+                                             'Choose Material to apply to selection:',
+                                             matlabels,
+                                             current_mat,
+                                             False)
+        if not status:
+            return
 
-            sockets = _getSocketProperties(warnings, node, bmat.name, node.name, [])
+        material = next(m for m in mats if m.Label == input)
 
-            matdata[node.name] = {'Type':     node.__class__.__name__,
-                                  'Sockets':  sockets,
-                                  'Link':     links,
-                                  'Inputs':   inputs,
-                                  'Outputs':  outputs}
-
-        if matdata:
-            if bmat.name in materials:
-                mat = materials[bmat.name]
-            else:
-                mat = makeMaterial(bmat.name)
-                materials[bmat.name] = mat
-            temp = mat.Material.copy()
-            temp[root] = json.dumps(tuple(matdata.keys()))
-            for node, data in matdata.items():
-                temp[root + '.' + node] = json.dumps(data)
-            mat.Material = temp
-
-            #print("JSON Data: %s" % json.dumps(matdata))
-
-    print("Material Done **************************")
-
-    # browse all objects in the Blender collection
-    for bobj in bcoll.objects:
-        name = bobj.get('Name')
-        if name is None:
-            msg = f"Blender object: {bobj.name}, don't have a custom property: Name, skipped...\n"
-            warnings.append(msg)
-            App.Console.PrintMessage(msg)
-            continue
-        obj = doc.getObject(name)
-        if obj is None:
-            msg = f"FreeCAD object: {name} with Label: {bobj.name}, can't be retrieved, skipped...\n"
-            warnings.append(msg)
-            App.Console.PrintMessage(msg)
-            continue
-        # create material if not exist and set material color
-        bmat = bobj.active_material
-        if bmat:
-            if bmat.name not in materials:
-                transparency = round(alpha * 100)
-                mat = makeMaterial(bmat.name, (r, g, b), transparency)
-                materials[bmat.name] = mat
-                msg = f"FreeCAD object: {name} appears to have material: {bmat.name} that is not listed!!!\n"
-                warnings.append(msg)
-                App.Console.PrintMessage(msg)
-            else:
-                mat = materials[bmat.name]
+        # Update selected objects
+        App.ActiveDocument.openTransaction('MaterialApplier')
+        for obj in selection:
+            # Add Material property to the object if it hasn't got one
             if 'Material' not in obj.PropertiesList:
-                obj.addProperty('App::PropertyLink', 'Material')
-            obj.Material = mat
-        # set DiffuseColor for all faces
-        colors = []
-        default = (0.0, 0.0, 0.0, 0.0)
-        index = bobj.active_material_index
-        for bface in bobj.data.polygons:
-            App.Console.PrintMessage(f"object: {bobj.name} - face: {bface.index} - materiel_index: {bface.material_index}\n")
-            if bface.material_index != index:
-                bslot = bobj.material_slots[bface.material_index]
-                if bslot is None or not bslot.material.node_tree:
-                    break
-                principled = bslot.material.node_tree.nodes['Principled BSDF']
-                if principled is None:
-                    break
-                r, g, b, alpha = principled.inputs['Base Color'].default_value
-                color = (r, g, b, 1.0 - alpha)
-            else:
-                color = default
-            colors.append(color)
-        # surprising an else here right: we set DiffuseColor only if we have all faces...
-        else:
-            obj.ViewObject.DiffuseColor = colors
-    return True, warnings, url
+                obj.addProperty('App::PropertyLink', 'Material', '', 'The Material for this object')
+            try:
+                obj.Material = material
+            except TypeError:
+                msg = f'Cannot apply Material to object: {obj.Label}, material property is of wrong type'
+                App.Console.PrintError(msg)
+        App.ActiveDocument.commitTransaction()
 
-def _getInputData(warnings, bmat, node):
-    links = {}
-    inputs = {}
-    for input in node.inputs:
-        for link in input.links:
-            links[input.name] = (link.from_node.name, link.from_socket.name)
-        if input.type == 'VALUE':
-            v = input.default_value
-            value = v
-        elif input.type == 'VECTOR':
-            v = input.default_value
-            value = (v[0], v[1], v[2])
-        elif input.type == 'RGBA':
-            v = input.default_value
-            value = (v[0], v[1], v[2], v[3])
-        elif input.type == 'SHADER':
-            continue
-        else:
-            msg = f"FreeCAD material {bmat.name} on node {node.name} can't read input: {input.name} type {input.type} is not supported, skipping...\n"
-            warnings.append(msg)
-            App.Console.PrintMessage(msg)
-            continue
-        App.Console.PrintMessage(f"Material Name: {bmat.name} Node: {node.name} Input: {input.name} - Value: {value}\n")
-        inputs[input.name] = value
-    return links, inputs
 
-def _getOutputs(warnings, bmat, node):
-    outputs = {}
-    for output in node.outputs:
-        if output.type == 'VALUE':
-            v = output.default_value
-            value = v
-        elif output.type == 'VECTOR':
-            v = output.default_value
-            value = (v[0], v[1], v[2])
-        elif output.type == 'RGBA':
-            v = output.default_value
-            value = (v[0], v[1], v[2], v[3])
-        elif output.type == 'SHADER':
-            continue
-        else:
-            msg = f"FreeCAD material {bmat.name} on node {node.name} can't read output: {output.name} type {output.type} is not supported, skipping...\n"
-            warnings.append(msg)
-            App.Console.PrintMessage(msg)
-            continue
-        App.Console.PrintMessage(f"Material Name: {bmat.name} Node: {node.name} output: {output.name} - Value: {value}\n")
-        outputs[output.name] = value
-    return outputs
+class EditMaterial():
+    """GUI command to view Blender settings of a material object."""
 
-def _getSocketProperties(warnings, obj, mat, node, properties):
-    data = {}
-    skipping = ('rna_type', 'inputs', 'outputs', 'dimensions', 'type',
-                'is_hidden', 'from_node', 'from_socket', 'to_node', 'to_socket')
-    for p in dir(obj):
-        if p not in skipping and not (p.startswith('_') or p.startswith('bl_')):
-            v = getattr(obj, p)
-            if v is None or isinstance(v, bpy.types.bpy_func):
-                continue
-            elif isinstance(v, (str, int, float, bool)):
-                value = v
-            elif isinstance(v, mathutils.Color):
-                value = {'r': v.r, 'g': v.g, 'b': v.b}
-            elif isinstance(v, mathutils.Euler):
-                value = {'x': v.x, 'y': v.y, 'z': v.z, 'order': v.order}
-            elif isinstance(v, mathutils.Vector):
-                if len(v) == 2:
-                    value = {'x': v.x, 'y': v.y}
-                elif len(v) == 3:
-                    value = {'x': v.x, 'y': v.y, 'z': v.z}
-                elif len(v) == 4:
-                    value = {'x': v.x, 'y': v.y, 'z': v.z, 'w': v.w}
-            elif isinstance(v, bpy.types.bpy_prop_array):
-                value = []
-                for d in v:
-                    value.append(d)
-            elif isinstance(v, bpy.types.bpy_prop_collection):
-                value = {}
-                properties.append(p)
-                for k, d in v.items():
-                    value[k] = _getSocketProperties(warnings, d, mat, node, properties)
-            elif isinstance(v, bpy.types.TexMapping):
-                properties.append(p)
-                value = _getSocketProperties(warnings, v, mat, node, properties)
-            elif isinstance(v, bpy.types.ColorRamp):
-                properties.append(p)
-                value = _getSocketProperties(warnings, v, mat, node, properties)
-            elif isinstance(v, bpy.types.ColorMapping):
-                properties.append(p)
-                value = _getSocketProperties(warnings, v, mat, node, properties)
-            else:
-                msg = f"FreeCAD material {mat} on node {node} can't read property: {p} type {type(v)} is not supported, skipping...\n"
-                warnings.append(msg)
-                App.Console.PrintMessage(msg)
-                continue
-            data[p] = value
-            properties.append(p)
-            App.Console.PrintMessage(f"Node socket: {node} property: {'.'.join(properties)} value: {str(value)}\n")
-    return data
+    def GetResources(self):
+        icon = os.path.join(iconpath , icondir, 'EditMaterial.svg')
+        return {'Pixmap':   icon,
+                'MenuText': 'Edit Material',
+                'Accel':    'E, M',
+                'ToolTip':  'Edit a Blender Material'}
+
+    def Activated(self):
+        """This code is executed when the command is run in FreeCAD.
+        It opens a dialog to view / delete Blender nodes of the selected
+        material.
+        """
+        App.ActiveDocument.openTransaction("EditMaterial")
+        task = BlenderMaterial()
+        Gui.Control.showDialog(task)
+        App.ActiveDocument.commitTransaction()

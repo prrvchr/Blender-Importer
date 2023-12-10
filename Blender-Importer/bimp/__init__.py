@@ -27,4 +27,4 @@
 ╚════════════════════════════════════════════════════════════════════════════════════╝
 '''
 
-from .commands import BlenderImport, MakeMaterial
+from .commands import BlenderImport, MakeMaterial, ApplyMaterial, EditMaterial

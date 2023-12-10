@@ -68,7 +68,7 @@ Cette interopérabilité est réalisée grâce à l'atelier FreeCAD **Blender Im
 
 Plus d'informations sur ce [fil de discussion][12] (en anglais)
 
-[1]: </img/blender.svg#collapse>
+[1]: <https://prrvchr.github.io/Blender-Importer/img/blender_importer.svg#collapse>
 [2]: <https://prrvchr.github.io/Blender-Importer/README_fr>
 [3]: <https://prrvchr.github.io/Blender-Importer/>
 [4]: <https://wiki.freecadweb.org/Workbenches>
@@ -76,7 +76,7 @@ Plus d'informations sur ce [fil de discussion][12] (en anglais)
 [6]: <https://prrvchr.github.io/README_fr>
 [7]: <https://github.com/prrvchr/Blender-Importer>
 [8]: <https://github.com/prrvchr/Blender-Importer/issues/new>
-[9]: </img/blender.svg#middle>
+[9]: <https://prrvchr.github.io/Blender-Importer/img/blender.svg#middle>
 [10]: <https://github.com/prrvchr/Blender-Importer/releases/latest/download/Blender-Importer.zip>
 [11]: <https://img.shields.io/github/downloads/prrvchr/Blender-Importer/latest/total?label=v0.0.1#right>
 [12]: <https://forum.freecad.org/viewtopic.php?t=83135>

@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
 ╔════════════════════════════════════════════════════════════════════════════════════╗
 ║                                                                                    ║
@@ -23,60 +24,42 @@
 ║                                                                                    ║
 ╚════════════════════════════════════════════════════════════════════════════════════╝
 -->
-# [![Blender Importer logo][1]][2] Documentation
-
-**Ce [document][3] en français.**
-
-A [FreeCAD][4][Workbench][5] which allows you to import materials and colors/transparencies from a .blend file
-
-## Introduction:
-
-**Blender Importer** is part of a [Suite][6] of extensions allowing to offer you innovative services in Open Source Sofware.  
-
-Being free software I encourage you:
-- To duplicate its [source code][7].
-- To make changes, corrections, improvements.
-- To open [issue][8] if needed.
-
-In short, to participate in the development of this extension.
-Because it is together that we can make Free Software smarter.
-
-___
-
-## Install:
-
-- ![Blender-Importer logo][9] Download file **[Blender-Importer.zip][10]** [![Version][11]][10]
-
-Copy this file in:
-
-- For Linux: `~/.local/share/FreeCAD/Mod/`
-- For Windows: `%AppData%\FreeCAD\Mod`
-
-Then unzip the zip file in the `Mod` directory. Please note that the archive size is 1.2 GB. Once unzipped you can delete the zip file.
-
-___
-
-## Historical:
-
-### Introduction:
-
-I am required to present a realistic photo of my future house for my building permit.  
-I managed to draw the basic plan of this famous house in FreeCAD. I now need to be able to produce this realistic photo.  
-After several attempts in FreeCAD I had to resort to using Blender to be able to produce this famous realistic photo.  
-In order to make this work easier, I decided to make the two softwares FreeCAD and Blender interoperable.  
-This interoperability is achieved thanks to the FreeCAD **Blender Importer** workbench and the Blender **FreeCAD Importer** plugin.
-
-More information on this [forum thread][12]
-
-[1]: <https://prrvchr.github.io/Blender-Importer/img/blender_importer.svg#collapse>
-[2]: <https://prrvchr.github.io/Blender-Importer/>
-[3]: <https://prrvchr.github.io/Blender-Importer/README_fr>
-[4]: <https://www.freecadweb.org>
-[5]: <https://wiki.freecadweb.org/Workbenches>
-[6]: <https://prrvchr.github.io/>
-[7]: <https://github.com/prrvchr/Blender-Importer>
-[8]: <https://github.com/prrvchr/Blender-Importer/issues/new>
-[9]: <https://prrvchr.github.io/Blender-Importer/img/blender.svg#middle>
-[10]: <https://github.com/prrvchr/Blender-Importer/releases/latest/download/Blender-Importer.zip>
-[11]: <https://img.shields.io/github/downloads/prrvchr/Blender-Importer/latest/total?label=v0.0.1#right>
-[12]: <https://forum.freecad.org/viewtopic.php?t=83135>
+<ui version="4.0">
+ <class>BlenderMaterial</class>
+ <widget class="QWidget" name="BlenderMaterial">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Blender Material Editor</string>
+  </property>
+  <property name="locale">
+   <locale language="English" country="UnitedStates"/>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QComboBox" name="comboBox"/>
+   </item>
+   <item>
+    <widget class="QListWidget" name="listWidget"/>
+   </item>
+   <item>
+    <widget class="QPushButton" name="pushButton">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="text">
+      <string>Delete all shader</string>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

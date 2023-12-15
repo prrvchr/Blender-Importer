@@ -27,7 +27,7 @@
 
 **This [document][3] in English.**
 
-# version [0.0.1][4]
+# version [0.0.2][4]
 
 Un [atelier][5] [FreeCAD][6] qui permet d'importer les matériaux Blender à partir d'un fichier .blend.
 
@@ -81,6 +81,6 @@ Plus d'informations sur ce [fil de discussion][14] (en anglais)
 [9]: <https://github.com/prrvchr/Blender-Importer/issues/new>
 [10]: <https://prrvchr.github.io/Blender-Importer/img/blender.svg#middle>
 [11]: <https://github.com/prrvchr/Blender-Importer/releases/latest/download/Blender-Importer.zip>
-[12]: <https://img.shields.io/github/downloads/prrvchr/Blender-Importer/latest/total?label=v0.0.1#right>
+[12]: <https://img.shields.io/github/downloads/prrvchr/Blender-Importer/latest/total?label=v0.0.2#right>
 [13]: <https://prrvchr.github.io/FreeCAD-Importer/README_fr>
 [14]: <https://forum.freecad.org/viewtopic.php?t=83135>

@@ -44,8 +44,9 @@ from ArchMaterial import makeMaterial
 def importFile(doc):
     warnings = []
     root = 'Blender'
+    maxpolygons = 1000
     path, fname = os.path.split(doc.FileName)
-    filename, sep, ext = fname.rpartition('.')
+    filename, ext = os.path.splitext(fname)
     App.Console.PrintMessage(f"Activated active document name: {filename}\n")
 
     # get and open the Blender file
@@ -137,7 +138,8 @@ def importFile(doc):
             warnings.append(msg)
             App.Console.PrintMessage(msg)
             continue
-        # create material if not exist and set material color
+
+        # create material if not exist
         bmat = bobj.active_material
         if bmat:
             if bmat.name not in materials:
@@ -152,27 +154,30 @@ def importFile(doc):
             if 'Material' not in obj.PropertiesList:
                 obj.addProperty('App::PropertyLink', 'Material')
             obj.Material = mat
-        # set DiffuseColor for all faces
-        colors = []
-        default = (0.0, 0.0, 0.0, 0.0)
-        index = bobj.active_material_index
-        for bface in bobj.data.polygons:
-            App.Console.PrintMessage(f"object: {bobj.name} - face: {bface.index} - materiel_index: {bface.material_index}\n")
-            if bface.material_index != index:
-                bslot = bobj.material_slots[bface.material_index]
-                if bslot is None or not bslot.material.node_tree:
-                    break
-                principled = bslot.material.node_tree.nodes['Principled BSDF']
-                if principled is None:
-                    break
-                r, g, b, alpha = principled.inputs['Base Color'].default_value
-                color = (r, g, b, 1.0 - alpha)
-            else:
-                color = default
-            colors.append(color)
-        # surprising an else here right: we set DiffuseColor only if we have all faces...
-        else:
-            obj.ViewObject.DiffuseColor = colors
+
+        # set material all faces
+        fmat = {}
+        bfaces = bobj.data.polygons
+        if bfaces and len(bfaces) < maxpolygons:
+            bindex = bobj.active_material_index
+            for bface in bfaces:
+                if bface.material_index != bindex:
+                    bslot = bobj.material_slots[bface.material_index]
+                    if bslot is None or not bslot.material:
+                        continue
+                    App.Console.PrintMessage(f"object: {bobj.name} - face: {bface.index} - materiel_index: {bface.material_index}\n")
+                    if bslot.material.name not in fmat:
+                        fmat[bslot.material.name] = []
+                    fmat[bslot.material.name].append(bface.index)
+            if fmat:
+                if 'MaterialFaces' not in obj.PropertiesList:
+                    obj.addProperty('App::PropertyString', 'MaterialFaces')
+                data = json.dumps(fmat)
+                obj.MaterialFaces = data
+                App.Console.PrintMessage(f"object: {bobj.name} - faces materials: {data}\n")
+        if not fmat and 'MaterialFaces' in obj.PropertiesList:
+            obj.removeProperty('MaterialFaces')
+
     return True, warnings, url
 
 def isMultiMaterial(obj):
@@ -182,7 +187,7 @@ def isMultiMaterial(obj):
     except AttributeError:
         return False
 
-    multimat = _getproxyattr(obj, 'Type', None) == 'MultiMaterial'
+    multimat = _getproxyattr(obj, 'Type') == 'MultiMaterial'
 
     return obj is not None and feature and multimat
 
@@ -300,7 +305,7 @@ def _getSocketProperties(warnings, obj, mat, node, properties):
             App.Console.PrintMessage(f"Node socket: {node} property: {'.'.join(properties)} value: {str(value)}\n")
     return data
 
-def _getproxyattr(obj, name, default):
+def _getproxyattr(obj, name, default=None):
     """Get attribute on object's proxy."""
 
     # Behaves like getattr, but on Proxy property, and with mandatory default...

@@ -82,7 +82,7 @@ static char * blender_xpm[] = {
         Gui.addCommand('Edit_Material',  EditMaterial())
         commands = ['Blender_Import', 'Make_Material', 'Apply_Material', 'Edit_Material']
         # Add commands to menu and toolbar
-        self.appendToolbar("Blender WorkBench", commands)
+        self.appendToolbar("Blender Importer v0.0.2", commands)
         App.Console.PrintMessage(f"Initialize pby version is: {bpy.app.version_string}\n")
 
     def GetClassName(self):
